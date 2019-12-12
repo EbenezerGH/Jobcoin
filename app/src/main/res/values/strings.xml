@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">jobcoin</string>
+    <string name="action_settings">Settings</string>
+    <string name="signin_success">Sign in Successful</string>
+    <string name="signin_failure">Sign in Failed %s</string>
+    <string name="chart_update_failure">Unable to update Chart %s</string>
+    <string name="empty_field">field cannot be empty</string>
+    <string name="updating">Updating</string>
+    <string name="unable_fetch_transaction_history">Unable to Fetch Transaction History</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="send">Send</string>
+    <string name="from_address">From Address</string>
+    <string name="to_address">To Address</string>
+    <string name="amount">Amount</string>
+
+</resources>

@@ -1,0 +1,20 @@
+Notes:
+1) Opting not to pass whole arraylist of transactions as a bundle to the new fragment,
+I don't know how big that list could get, there is a limit to how much data could be passed
+in bundles.
+
+2) Decided to make network call to transactions after sign in, account balance is passed over,
+this is also a better solution because i'm not overloading the first signin api
+
+3) I don't see nicely documented apis too often, this was refreshing
+
+4) ViewModels and networking repository are separate from other classes which makes these classes
+easily testable
+
+5) Used toasts instead of Logs so you can see network responses
+
+Issues:
+6) I picked the first graph api i saw on github, but it had quite a few limitations
+a) x axis only accepts double or full timestamp, so I just assigned a double instead of
+assigning the full timestamp (the method to convert is listed in extensions.kt)
+b) graph viewport can't refocused
