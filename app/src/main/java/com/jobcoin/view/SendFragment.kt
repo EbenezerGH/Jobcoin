@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.api.domain.addressinfo.AddressInfoTransactionState
 import com.api.domain.sendtransaction.SendTransactionState
 import com.api.domain.sendtransaction.SendTransactionState.*
 import com.api.domain.transactionhistory.TransactionHistoryState
-import com.jobcoin.R
-import com.jobcoin.isNumeric
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.jobcoin.*
 import com.jobcoin.viewmodel.SendViewModel
 import kotlinx.android.synthetic.main.fragment_send.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -82,8 +85,19 @@ class SendFragment : Fragment() {
             is TransactionHistoryState.Success -> {
                 progress.visibility = View.GONE
 
-                graph.removeAllSeries()
-                graph.addSeries(vm.series(state.transaction))
+                val data = state.transaction.toArray()
+                val entries = ArrayList<Entry>()
+
+                for (i in data.indices) {
+                    entries.add(
+                        Entry(
+                            state.transaction[i].timestamp.timestampToFloat(),
+                            state.transaction[i].amount.toFloat()
+                        )
+                    )
+                }
+
+                populateGraph(entries)
             }
             is TransactionHistoryState.Failure -> {
                 progress.visibility = View.GONE
@@ -94,6 +108,22 @@ class SendFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    private fun populateGraph(entries: ArrayList<Entry>) {
+        val dataSet = LineDataSet(entries, "Transactions")
+        dataSet.color =
+            ContextCompat.getColor(context?.let { it } ?: throw Exception("Bad color"),
+                R.color.colorAccent)
+        dataSet.valueTextColor =
+            ContextCompat.getColor(context?.let { it } ?: throw Exception("Bad color"),
+                R.color.colorPrimary)
+
+        val lineData = LineData(dataSet)
+        val timestampFormatter = TimestampValueFormatter()
+        graph_holder.xAxis.valueFormatter = timestampFormatter
+        graph_holder.data = lineData
+        graph_holder.invalidate()
     }
 
     private val fetchSendTransactionStateListener = Observer<SendTransactionState> { state ->
@@ -124,8 +154,19 @@ class SendFragment : Fragment() {
 
                 tv_balance.text = state.addressInfo.balance
 
-                graph.removeAllSeries()
-                graph.addSeries(vm.series(state.addressInfo.transactions))
+                val data = state.addressInfo.transactions.toArray()
+                val entries = ArrayList<Entry>()
+
+                for (i in data.indices) {
+                    entries.add(
+                        Entry(
+                            state.addressInfo.transactions[i].timestamp.timestampToFloat(),
+                            state.addressInfo.transactions[i].amount.toFloat()
+                        )
+                    )
+                }
+
+                populateGraph(entries)
             }
 
             is AddressInfoTransactionState.Failure -> {
