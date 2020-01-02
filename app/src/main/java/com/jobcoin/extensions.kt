@@ -18,3 +18,9 @@ fun String.toFullDate(): Date {
     val sdf = SimpleDateFormat("yyyy-MM-d'T'HH:mm:ss.SSSX", Locale.ENGLISH)
     return sdf.parse(this) ?: throw Exception("Invalid Date")
 }
+
+// We don't have to worry about data loss while converting from Float -> Long
+// in this instance because the float will contain trailing zeroes
+fun String.timestampToFloat(): Float {
+    return this.toFullDate().time.toFloat()
+}

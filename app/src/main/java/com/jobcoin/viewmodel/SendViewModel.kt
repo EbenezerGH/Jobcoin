@@ -9,13 +9,8 @@ import com.api.domain.sendtransaction.SendTransaction
 import com.api.domain.sendtransaction.SendTransactionRepository
 import com.api.domain.sendtransaction.SendTransactionState
 import com.api.domain.sendtransaction.SendTransactionState.*
-import com.api.domain.transactionhistory.Transaction
 import com.api.domain.transactionhistory.TransactionHistoryRepository
 import com.api.domain.transactionhistory.TransactionHistoryState
-import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
-import com.jjoe64.graphview.series.Series
-import com.jobcoin.toFullDate
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -137,22 +132,6 @@ class SendViewModel(
                 )
             }
         }
-    }
-
-    fun series(transaction: ArrayList<Transaction>): Series<DataPoint>? {
-        val series = LineGraphSeries<DataPoint>()
-        var counter = 0.0
-        for (i in transaction.indices) {
-            series.appendData(
-                    DataPoint(
-                            //transaction[i].timestamp.toFullDate(), //Library limitation, text overlaps*/
-                            counter++,
-                            transaction[i].amount.toDouble()),
-                    false, 1000, false)
-            series.setAnimated(true)
-        }
-
-        return series
     }
 
 }
